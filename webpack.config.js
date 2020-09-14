@@ -4,6 +4,7 @@ const HTMLWebpackPlugin = require("html-webpack-plugin");
 const NODE_ENV = process.env.NODE_ENV;
 const IS_DEV = NODE_ENV === "development";
 const IS_PROD = NODE_ENV === "production";
+const GLOBAL_CSS_REGEXP = /\.global\.css$/;
 
 function setupDevtool() {
   if (IS_DEV) return "eval";
@@ -15,7 +16,7 @@ module.exports = {
     extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
   },
   mode: NODE_ENV ? NODE_ENV : "development",
-  entry: path.resolve(__dirname, "src/index.jsx"),
+  entry: path.resolve(__dirname, "src/index.tsx"),
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "index.js",
@@ -41,6 +42,11 @@ module.exports = {
             },
           },
         ],
+        exclude: GLOBAL_CSS_REGEXP,
+      },
+      {
+        test: GLOBAL_CSS_REGEXP,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },
